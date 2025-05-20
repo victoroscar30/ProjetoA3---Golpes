@@ -20,7 +20,7 @@ public class UsuarioDashboardUI {
         }
 
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Dashboard- " + nomeUsuario);
+            JFrame frame = new JFrame("Dashboard - " + nomeUsuario);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(1200, 700);
             frame.setLocationRelativeTo(null);
