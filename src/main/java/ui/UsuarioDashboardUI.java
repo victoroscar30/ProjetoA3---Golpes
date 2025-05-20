@@ -5,6 +5,9 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
+import ADT.*;
 
 public class UsuarioDashboardUI {
 
@@ -20,6 +23,17 @@ public class UsuarioDashboardUI {
         }
 
         SwingUtilities.invokeLater(() -> {
+            TrieUrls trie = new TrieUrls(true);
+
+            /*
+            trie.inserir("google.com");
+            trie.inserir("gmail.com");
+            trie.inserir("github.com");
+            trie.inserir("g1.globo.com");
+            trie.inserir("globo.com");
+            */
+
+
             JFrame frame = new JFrame("Dashboard - " + nomeUsuario);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(1200, 700);
@@ -62,6 +76,33 @@ public class UsuarioDashboardUI {
             JButton buscarBtn = new JButton("Buscar");
             buscaPanel.add(urlField, "growx");
             buscaPanel.add(buscarBtn);
+
+
+            JPopupMenu sugestoesPopup = new JPopupMenu();
+            sugestoesPopup.setFocusable(false);
+            urlField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    String texto = urlField.getText();
+                    sugestoesPopup.setVisible(false);
+                    sugestoesPopup.removeAll();
+                    if (!texto.isEmpty()) {
+                        List<String> sugestoes = trie.sugerir(texto);
+                        if (!sugestoes.isEmpty()) {
+                            for (String sugestao : sugestoes) {
+                                JMenuItem item = new JMenuItem(sugestao);
+                                item.addActionListener(ae -> {
+                                    urlField.setText(sugestao);
+                                    sugestoesPopup.setVisible(false);
+                                });
+                                sugestoesPopup.add(item);
+                            }
+                            sugestoesPopup.show(urlField, 0, urlField.getHeight());
+                        }
+                    }
+                }
+            });
+
             contentPanel.add(createSectionPanel("Buscar URL", buscaPanel), "span 2, growx");
 
             // Tabela Histórico de Acessos
