@@ -1,7 +1,14 @@
+### Maven ###
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+### Gradle (se aplicável) ###
+.gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -27,12 +34,20 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
 
-### Mac OS ###
+### Logs e temporários ###
+*.log
+*.tmp
+
+### Banco de dados (opcional) ###
+*.sql
+
+### Sistema - macOS ###
 .DS_Store
+
+### Sistema - Windows ###
+Thumbs.db
+desktop.ini
