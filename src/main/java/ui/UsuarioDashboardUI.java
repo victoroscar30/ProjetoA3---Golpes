@@ -41,7 +41,7 @@ public class UsuarioDashboardUI {
             sidebar.setPreferredSize(new Dimension(200, 0));
             sidebar.setBackground(new Color(30, 30, 30));
 
-            JLabel appLabel = new JLabel("MyApp");
+            JLabel appLabel = new JLabel("Teste");
             appLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
             appLabel.setForeground(Color.WHITE);
             sidebar.add(appLabel);
@@ -89,6 +89,8 @@ public class UsuarioDashboardUI {
             atualizarPanel.add(new JLabel("Novo Email:"));
             atualizarPanel.add(new JTextField());
             atualizarPanel.add(new JLabel("Nova Senha:"));
+            atualizarPanel.add(new JPasswordField());
+            atualizarPanel.add(new JLabel("Confirmar Nova Senha:"));
             atualizarPanel.add(new JPasswordField());
             atualizarPanel.add(new JLabel());
             atualizarPanel.add(new JButton("Atualizar"));
