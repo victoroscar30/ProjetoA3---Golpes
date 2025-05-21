@@ -168,7 +168,7 @@ public class LoginUI {
                 if ("admin".equalsIgnoreCase(usuario.getTipo())) {
                     new AdminTela();
                 } else {
-                    UsuarioDashboardUI.mostrarTelaUsuario(usuario.getNome());
+                    UsuarioDashboardUI.mostrarTelaUsuario(usuario.getNome(), usuario.getId());
                 }
             } else {
                 erroLoginLabel.setText("Email ou senha incorretos.");
@@ -249,11 +249,11 @@ public class LoginUI {
                     boolean sucesso = dao.salvarUsuario(usuario);
 
                     if (sucesso) {
-                        JOptionPane.showMessageDialog(panel, "Cadastro realizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        //JOptionPane.showMessageDialog(panel, "Cadastro realizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                         cardLayout.show(cardsPanel, "LOGIN");
                         loginBtn.setSelected(true);
                     } else {
-                        JOptionPane.showMessageDialog(panel, "Erro ao salvar usuário. Email pode já estar em uso.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        senhaErroLabel.setText("Erro ao salvar usuário. Email pode já estar em uso.");
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

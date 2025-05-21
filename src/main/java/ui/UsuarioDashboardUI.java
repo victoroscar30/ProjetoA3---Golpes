@@ -9,13 +9,15 @@ import java.awt.event.*;
 import java.util.List;
 import ADT.*;
 
+import static database.UrlDAO.garantirUrlRegistrada;
+
 public class UsuarioDashboardUI {
 
     public static void main(String[] args) {
-        mostrarTelaUsuario("Fulano");
+        mostrarTelaUsuario("Fulano", 1);
     }
 
-    public static void mostrarTelaUsuario(String nomeUsuario) {
+    public static void mostrarTelaUsuario(String nomeUsuario, int idUsuario) {
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception e) {
@@ -24,15 +26,7 @@ public class UsuarioDashboardUI {
 
         SwingUtilities.invokeLater(() -> {
             TrieUrls trie = new TrieUrls(true);
-
-            /*
-            trie.inserir("google.com");
-            trie.inserir("gmail.com");
-            trie.inserir("github.com");
-            trie.inserir("g1.globo.com");
-            trie.inserir("globo.com");
-            */
-
+            JTable tabela = new JTable();
 
             JFrame frame = new JFrame("Dashboard - " + nomeUsuario);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -76,6 +70,26 @@ public class UsuarioDashboardUI {
             JButton buscarBtn = new JButton("Buscar");
             buscaPanel.add(urlField, "growx");
             buscaPanel.add(buscarBtn);
+            buscarBtn.addActionListener(e -> {
+                String urlDigitada = urlField.getText().trim();
+                if (!urlDigitada.isEmpty()) {
+                    try {
+                        int idUrl = garantirUrlRegistrada(urlDigitada);
+
+                        if (idUrl > 0) {
+                            dao.AcessoDAO acessoDAO = new dao.AcessoDAO();
+                            acessoDAO.registrarAcesso(idUsuario, idUrl, false); // ou lógica para detectar se é suspeita
+                            atualizarTabelaAcessos(tabela, idUsuario);
+                            //JOptionPane.showMessageDialog(frame, "Acesso registrado com sucesso!");
+                        } else {
+                            JOptionPane.showMessageDialog(frame, "Erro ao registrar URL.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(frame, "Erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
 
 
             JPopupMenu sugestoesPopup = new JPopupMenu();
@@ -106,13 +120,27 @@ public class UsuarioDashboardUI {
             contentPanel.add(createSectionPanel("Buscar URL", buscaPanel), "span 2, growx");
 
             // Tabela Histórico de Acessos
-            JTable tabela = new JTable(new Object[][]{
-                    {"google.com", "2025-05-19", false},
-                    {"phishing-site.com", "2025-05-18", true}
-            }, new String[]{"URL", "Data", "Suspeito"});
+            //JTable tabela = new JTable();
             JScrollPane tabelaScroll = new JScrollPane(tabela);
-            tabelaScroll.setPreferredSize(new Dimension(500, 200));
+            tabelaScroll.setPreferredSize(new Dimension(400, 120));
             contentPanel.add(createSectionPanel("Histórico de Acessos", tabelaScroll), "span 2, growx");
+
+            // Carregar acessos reais (exemplo com mock DAO)
+            try {
+                dao.AcessoDAO acessoDAO = new dao.AcessoDAO();
+                List<model.Acesso> acessos = acessoDAO.listarAcessosPorUsuario(idUsuario); // você pode ajustar para usar ID do usuário se tiver
+                String[] colunas = {"URL", "Data", "Suspeito"};
+                Object[][] dados = new Object[acessos.size()][3];
+                for (int i = 0; i < acessos.size(); i++) {
+                    model.Acesso ac = acessos.get(i);
+                    dados[i][0] = ac.getUrl();
+                    dados[i][1] = ac.getData();
+                    dados[i][2] = ac.isSuspeito();
+                }
+                tabela.setModel(new javax.swing.table.DefaultTableModel(dados, colunas));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
             // Avisos
             JTextArea avisosArea = new JTextArea("Nenhum aviso encontrado.");
@@ -170,4 +198,22 @@ public class UsuarioDashboardUI {
         panel.add(conteudo, BorderLayout.CENTER);
         return panel;
     }
+
+    private static void atualizarTabelaAcessos(JTable tabela, int idUsuario) {
+        dao.AcessoDAO acessoDAO = new dao.AcessoDAO();
+        List<model.Acesso> acessos = acessoDAO.listarAcessosPorUsuario(idUsuario);
+
+        String[] colunas = {"URL", "Data", "Suspeito"};
+        Object[][] dados = new Object[acessos.size()][3];
+
+        for (int i = 0; i < acessos.size(); i++) {
+            model.Acesso ac = acessos.get(i);
+            dados[i][0] = ac.getUrl();
+            dados[i][1] = ac.getData();
+            dados[i][2] = ac.isSuspeito();
+        }
+
+        tabela.setModel(new javax.swing.table.DefaultTableModel(dados, colunas));
+    }
+
 }

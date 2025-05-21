@@ -73,4 +73,35 @@ public class UrlDAO {
         }
         return lista;
     }
+
+    public static int garantirUrlRegistrada(String urlTexto) {
+        UrlDAO dao = new UrlDAO();
+        Url url = dao.buscarPorUrl(urlTexto);
+
+        if (url != null) {
+            return url.getId();
+        }
+
+        // Inserir nova URL
+        Url nova = new Url();
+        nova.setUrl(urlTexto);
+        nova.setDominio(extrairDominio(urlTexto));
+        nova.setClassificacao("desconhecida");
+
+        boolean sucesso = dao.salvarUrl(nova);
+        if (sucesso) {
+            Url inserida = dao.buscarPorUrl(urlTexto);
+            return inserida != null ? inserida.getId() : -1;
+        }
+
+        return -1;
+    }
+
+    private static String extrairDominio(String urlTexto) {
+        try {
+            return new java.net.URL(urlTexto).getHost();
+        } catch (Exception e) {
+            return urlTexto;
+        }
+    }
 }
