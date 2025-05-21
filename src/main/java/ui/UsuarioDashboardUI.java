@@ -56,7 +56,7 @@ public class UsuarioDashboardUI {
             buscarPanel.setBackground(new Color(45, 45, 45));
 
             buscarPanel.add(createDashboardCard("Acessos Suspeitos", "5", new Color(204, 0, 0)), "growx");
-            buscarPanel.add(createDashboardCard("\u00daltimo Acesso", "2025-05-20", new Color(0, 102, 204)), "growx");
+            buscarPanel.add(createDashboardCard("Último Acesso", "2025-05-20", new Color(0, 102, 204)), "growx");
 
             JPanel buscaPanel = new JPanel(new MigLayout("", "[grow][100]", ""));
             buscaPanel.setOpaque(false);
