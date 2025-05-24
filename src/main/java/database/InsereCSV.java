@@ -46,6 +46,8 @@ public class InsereCSV{
                     classificacao = "desconhecida";
                 } else if ("malware".equalsIgnoreCase(classificacao)) {
                     classificacao = "suspeita";
+                } else if ("seguro".equalsIgnoreCase(classificacao)) {
+                    classificacao = "segura";
                 } else if (classificacao == null || classificacao.isEmpty()) {
                     classificacao = "desconhecida";
                 }
