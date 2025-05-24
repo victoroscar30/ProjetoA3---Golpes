@@ -1,11 +1,9 @@
-package database;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.*;
 import java.util.Set;
 
-public class InsereCSV {
+public class InsereCSV{
 
     public static void main(String[] args) {
         String jdbcURL = "jdbc:mysql://localhost:3306/projeto_golpes";
