@@ -12,7 +12,7 @@ public class InsereCSV{
 
         String csvFilePath = "C:/Users/Gustavo/Downloads/a3 bora.csv";
 
-        // Define allowed ENUM values
+        // Definição de valores padrão pra classificação do tipo de site
         Set<String> allowedClassificacoes = Set.of("segura", "suspeita", "phishing", "desconhecida");
 
         try (Connection connection = DriverManager.getConnection(jdbcURL, username, password)) {
@@ -26,23 +26,22 @@ public class InsereCSV{
 
             int count = 0;
 
-            // Skip header line
             lineReader.readLine();
 
             while ((lineText = lineReader.readLine()) != null) {
                 String[] data = lineText.split(";", -1);  // -1 keeps trailing empty strings
 
-                // Defensive: Trim all fields
+                // trim
                 for (int i = 0; i < data.length; i++) {
                     data[i] = data[i].trim();
                 }
 
-                // Map columns
+                // Mapeamento
                 String url = data[3];
                 String dominio = data[2];
                 String classificacao = data[1];
 
-                // Fix ENUM inconsistencies
+                // pega inconsistência
                 if ("desconhecido".equalsIgnoreCase(classificacao)) {
                     classificacao = "desconhecida";
                 } else if ("malware".equalsIgnoreCase(classificacao)) {
@@ -51,7 +50,7 @@ public class InsereCSV{
                     classificacao = "desconhecida";
                 }
 
-                // Validate ENUM
+                // validação
                 if (!allowedClassificacoes.contains(classificacao)) {
                     System.out.println("⚠️ Invalid classificacao: " + classificacao + " at row " + (count + 1) + ". Defaulting to 'desconhecida'.");
                     classificacao = "desconhecida";
@@ -66,7 +65,7 @@ public class InsereCSV{
                 statement.setString(3, classificacao);
                 statement.addBatch();
 
-                // Batch execution every 1000 rows
+                // Batch a cada 1000 linhas
                 if (count % 1000 == 0 && count > 0) {
                     statement.executeBatch();
                 }
@@ -76,7 +75,7 @@ public class InsereCSV{
 
             lineReader.close();
 
-            // Execute remaining batch
+            // Batch de resto
             statement.executeBatch();
 
             connection.commit();
