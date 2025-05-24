@@ -6,9 +6,9 @@ import java.util.Set;
 public class InsereCSV{
 
     public static void main(String[] args) {
-        String jdbcURL = "jdbc:mysql://localhost:3306/projeto_golpes";
-        String username = "gustavinho";
-        String password = "123456";
+        String jdbcURL = "jdbc:mysql://localhost:3306/projeto_golpes"; // nunca muda
+        String username = "gustavinho"; // coloca o usuario que você settou no workbench
+        String password = "123456"; // e a senha referente ao usuario
 
         String csvFilePath = "C:/Users/Gustavo/Downloads/a3 bora.csv";
 
