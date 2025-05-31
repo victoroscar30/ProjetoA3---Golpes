@@ -1,7 +1,5 @@
 package ui;
 
-import net.miginfocom.swing.MigLayout;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -11,98 +9,148 @@ import java.sql.*;
 import static database.Conexao.conectar;
 
 public class AdminPanel extends JFrame {
-
     private JComboBox<String> tabelaComboBox;
-    private JTable tabela;
+    private JTable dadosTable;
     private DefaultTableModel tableModel;
-    private JButton btnInserir, btnEditar, btnExcluir;
+
+    private JButton inserirBtn, editarBtn, deletarBtn, atualizarBtn;
 
     public AdminPanel() {
         setTitle("Painel Admin");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLayout(new BorderLayout());
 
-        JTabbedPane abas = new JTabbedPane();
-
-        JPanel crudPanel = new JPanel(new BorderLayout());
+        JPanel topPanel = new JPanel();
 
         tabelaComboBox = new JComboBox<>(new String[]{"usuarios", "urls", "acessos", "alertas"});
-        crudPanel.add(tabelaComboBox, BorderLayout.NORTH);
+        topPanel.add(tabelaComboBox);
 
-        tabela = new JTable();
-        JScrollPane scroll = new JScrollPane(tabela);
-        crudPanel.add(scroll, BorderLayout.CENTER);
+        inserirBtn = new JButton("Inserir");
+        editarBtn = new JButton("Editar");
+        deletarBtn = new JButton("Deletar");
+        atualizarBtn = new JButton("Atualizar");
 
-        JPanel botoes = new JPanel();
-        btnInserir = new JButton("Inserir");
-        btnEditar = new JButton("Editar");
-        btnExcluir = new JButton("Excluir");
-        botoes.add(btnInserir);
-        botoes.add(btnEditar);
-        botoes.add(btnExcluir);
-        crudPanel.add(botoes, BorderLayout.SOUTH);
+        topPanel.add(inserirBtn);
+        topPanel.add(editarBtn);
+        topPanel.add(deletarBtn);
+        topPanel.add(atualizarBtn);
 
-        abas.addTab("CRUD", crudPanel);
-        abas.addTab("Gráficos", new GraficoUrls());
+        add(topPanel, BorderLayout.NORTH);
 
-        add(abas, BorderLayout.CENTER);
+        tableModel = new DefaultTableModel();
+        dadosTable = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(dadosTable);
+        add(scrollPane, BorderLayout.CENTER);
 
-        // Eventos
-        tabelaComboBox.addActionListener(e -> carregarTabela());
-        btnInserir.addActionListener(e -> inserirRegistro());
-        btnEditar.addActionListener(e -> editarRegistro());
-        btnExcluir.addActionListener(e -> excluirRegistro());
+        atualizarTabela();
 
-        carregarTabela();
+        tabelaComboBox.addActionListener(e -> atualizarTabela());
+        atualizarBtn.addActionListener(e -> atualizarTabela());
+        inserirBtn.addActionListener(e -> inserirRegistro());
+        editarBtn.addActionListener(e -> editarRegistro());
+        deletarBtn.addActionListener(e -> deletarRegistro());
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
     }
 
-    private void carregarTabela() {
-        String tabelaSelecionada = (String) tabelaComboBox.getSelectedItem();
-        String sql = "SELECT * FROM " + tabelaSelecionada;
-
+    private void atualizarTabela() {
+        String tabela = (String) tabelaComboBox.getSelectedItem();
         try (Connection conn = conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM " + tabela)) {
 
-            tableModel = TabelaUtils.construirTabela(rs);
-            tabela.setModel(tableModel);
+            ResultSetMetaData metaData = rs.getMetaData();
+            int colCount = metaData.getColumnCount();
 
+            tableModel.setRowCount(0);
+            tableModel.setColumnCount(0);
+
+            for (int i = 1; i <= colCount; i++) {
+                tableModel.addColumn(metaData.getColumnName(i));
+            }
+
+            while (rs.next()) {
+                Object[] row = new Object[colCount];
+                for (int i = 0; i < colCount; i++) {
+                    row[i] = rs.getObject(i + 1);
+                }
+                tableModel.addRow(row);
+            }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar tabela: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
         }
     }
 
     private void inserirRegistro() {
-        JOptionPane.showMessageDialog(this, "Função de inserção não implementada.");
-        // Aqui você pode abrir um JDialog com campos para inserir dependendo da tabela
+        String tabela = (String) tabelaComboBox.getSelectedItem();
+        switch (tabela) {
+            case "usuarios":
+                new UsuarioDialog(this, null).setVisible(true);
+                break;
+            case "urls":
+                new UrlDialog(this, null).setVisible(true);
+                break;
+            case "acessos":
+                new AcessoDialog(this, null).setVisible(true);
+                break;
+            case "alertas":
+                new AlertaDialog(this, null).setVisible(true);
+                break;
+        }
+        atualizarTabela();
     }
 
     private void editarRegistro() {
-        JOptionPane.showMessageDialog(this, "Função de edição não implementada.");
-        // Similar ao inserir, mas preenchendo os campos com os dados da linha selecionada
-    }
-
-    private void excluirRegistro() {
-        int linha = tabela.getSelectedRow();
-        if (linha == -1) {
-            JOptionPane.showMessageDialog(this, "Selecione uma linha para excluir.");
+        int selectedRow = dadosTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um registro para editar.");
             return;
         }
+        int id = (int) tableModel.getValueAt(selectedRow, 0);
+        String tabela = (String) tabelaComboBox.getSelectedItem();
 
-        String tabelaSelecionada = (String) tabelaComboBox.getSelectedItem();
-        Object id = tabela.getValueAt(linha, 0);
+        switch (tabela) {
+            case "usuarios":
+                new UsuarioDialog(this, id).setVisible(true);
+                break;
+            case "urls":
+                new UrlDialog(this, id).setVisible(true);
+                break;
+            case "acessos":
+                new AcessoDialog(this, id).setVisible(true);
+                break;
+            case "alertas":
+                new AlertaDialog(this, id).setVisible(true);
+                break;
+        }
+        atualizarTabela();
+    }
 
-        String sql = "DELETE FROM " + tabelaSelecionada + " WHERE id = ?";
+    private void deletarRegistro() {
+        int selectedRow = dadosTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um registro para deletar.");
+            return;
+        }
+        int id = (int) tableModel.getValueAt(selectedRow, 0);
+        String tabela = (String) tabelaComboBox.getSelectedItem();
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Deseja realmente deletar o registro?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
 
         try (Connection conn = conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setObject(1, id);
+             PreparedStatement stmt = conn.prepareStatement("DELETE FROM " + tabela + " WHERE id = ?")) {
+            stmt.setInt(1, id);
             stmt.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Registro excluído.");
-            carregarTabela();
+            JOptionPane.showMessageDialog(this, "Registro deletado com sucesso.");
+            atualizarTabela();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
         }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new AdminPanel().setVisible(true));
     }
 }

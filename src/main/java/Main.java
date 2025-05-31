@@ -10,7 +10,6 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        SwingUtilities.invokeLater(() -> new AdminPanel().setVisible(true));
     }
 }
 //teste commit
