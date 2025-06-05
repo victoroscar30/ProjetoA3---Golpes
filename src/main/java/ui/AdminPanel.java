@@ -1,0 +1,156 @@
+package ui;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+
+import static database.Conexao.conectar;
+
+public class AdminPanel extends JFrame {
+    private JComboBox<String> tabelaComboBox;
+    private JTable dadosTable;
+    private DefaultTableModel tableModel;
+
+    private JButton inserirBtn, editarBtn, deletarBtn, atualizarBtn;
+
+    public AdminPanel() {
+        setTitle("Painel Admin");
+        setSize(800, 600);
+        setLayout(new BorderLayout());
+
+        JPanel topPanel = new JPanel();
+
+        tabelaComboBox = new JComboBox<>(new String[]{"usuarios", "urls", "acessos", "alertas"});
+        topPanel.add(tabelaComboBox);
+
+        inserirBtn = new JButton("Inserir");
+        editarBtn = new JButton("Editar");
+        deletarBtn = new JButton("Deletar");
+        atualizarBtn = new JButton("Atualizar");
+
+        topPanel.add(inserirBtn);
+        topPanel.add(editarBtn);
+        topPanel.add(deletarBtn);
+        topPanel.add(atualizarBtn);
+
+        add(topPanel, BorderLayout.NORTH);
+
+        tableModel = new DefaultTableModel();
+        dadosTable = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(dadosTable);
+        add(scrollPane, BorderLayout.CENTER);
+
+        atualizarTabela();
+
+        tabelaComboBox.addActionListener(e -> atualizarTabela());
+        atualizarBtn.addActionListener(e -> atualizarTabela());
+        inserirBtn.addActionListener(e -> inserirRegistro());
+        editarBtn.addActionListener(e -> editarRegistro());
+        deletarBtn.addActionListener(e -> deletarRegistro());
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+    }
+
+    private void atualizarTabela() {
+        String tabela = (String) tabelaComboBox.getSelectedItem();
+        try (Connection conn = conectar();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM " + tabela)) {
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            int colCount = metaData.getColumnCount();
+
+            tableModel.setRowCount(0);
+            tableModel.setColumnCount(0);
+
+            for (int i = 1; i <= colCount; i++) {
+                tableModel.addColumn(metaData.getColumnName(i));
+            }
+
+            while (rs.next()) {
+                Object[] row = new Object[colCount];
+                for (int i = 0; i < colCount; i++) {
+                    row[i] = rs.getObject(i + 1);
+                }
+                tableModel.addRow(row);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+        }
+    }
+
+    private void inserirRegistro() {
+        String tabela = (String) tabelaComboBox.getSelectedItem();
+        switch (tabela) {
+            case "usuarios":
+                new UsuarioDialog(this, null).setVisible(true);
+                break;
+            case "urls":
+                new UrlDialog(this, null).setVisible(true);
+                break;
+            case "acessos":
+                new AcessoDialog(this, null).setVisible(true);
+                break;
+            case "alertas":
+                new AlertaDialog(this, null).setVisible(true);
+                break;
+        }
+        atualizarTabela();
+    }
+
+    private void editarRegistro() {
+        int selectedRow = dadosTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um registro para editar.");
+            return;
+        }
+        int id = (int) tableModel.getValueAt(selectedRow, 0);
+        String tabela = (String) tabelaComboBox.getSelectedItem();
+
+        switch (tabela) {
+            case "usuarios":
+                new UsuarioDialog(this, id).setVisible(true);
+                break;
+            case "urls":
+                new UrlDialog(this, id).setVisible(true);
+                break;
+            case "acessos":
+                new AcessoDialog(this, id).setVisible(true);
+                break;
+            case "alertas":
+                new AlertaDialog(this, id).setVisible(true);
+                break;
+        }
+        atualizarTabela();
+    }
+
+    private void deletarRegistro() {
+        int selectedRow = dadosTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um registro para deletar.");
+            return;
+        }
+        int id = (int) tableModel.getValueAt(selectedRow, 0);
+        String tabela = (String) tabelaComboBox.getSelectedItem();
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Deseja realmente deletar o registro?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        try (Connection conn = conectar();
+             PreparedStatement stmt = conn.prepareStatement("DELETE FROM " + tabela + " WHERE id = ?")) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Registro deletado com sucesso.");
+            atualizarTabela();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new AdminPanel().setVisible(true));
+    }
+}
