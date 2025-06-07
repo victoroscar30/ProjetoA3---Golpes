@@ -68,4 +68,51 @@ public class UsuarioDAO {
             return false;
         }
     }
+
+    public static int acessosSuspeitosSeteDias(int id_usuario){
+        String query = "SELECT COUNT(*) \n" +
+                        "  FROM ACESSOS A \n" +
+                        "  INNER JOIN USUARIOS B ON A.ID_USUARIO = B.ID \n" +
+                        "  INNER JOIN URLS C ON A.ID_URL = C.ID\n" +
+                        "  WHERE DATA_ACESSO >= NOW() - INTERVAL 7 DAY AND A.SUSPEITO = 1 \n" +
+                        "    AND A.ID_USUARIO = ?";
+
+        try (Connection con = Conexao.conectar();
+             PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setInt(1, id_usuario);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public static String ultimoAcesso (int id_usuario){
+        String query = "SELECT MAX(DATE_FORMAT(DATA_ACESSO, '%d/%m/%Y')) AS DATA\n" +
+                "  FROM ACESSOS A \n" +
+                "  WHERE A.ID_USUARIO = ?";
+
+        try (Connection con = Conexao.conectar();
+             PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setInt(1, id_usuario);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+            return "";
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 }

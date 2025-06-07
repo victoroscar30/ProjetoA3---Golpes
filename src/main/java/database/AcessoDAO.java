@@ -1,6 +1,5 @@
-package dao;
+package database;
 
-import database.Conexao;
 import model.Acesso;
 import java.sql.*;
 import java.util.ArrayList;
@@ -38,6 +37,7 @@ public class AcessoDAO {
 
         return lista;
     }
+
 
     public void registrarAcesso(int idUsuario, int idUrl, boolean suspeito) {
         String sql = "INSERT INTO acessos (id_usuario, id_url, suspeito) VALUES (?, ?, ?)";

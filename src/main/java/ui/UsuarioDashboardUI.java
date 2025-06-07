@@ -1,15 +1,20 @@
 package ui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import database.AcessoDAO;
 import net.miginfocom.swing.MigLayout;
+import database.UsuarioDAO.*;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 import ADT.*;
 
 import static database.UrlDAO.garantirUrlRegistrada;
+import static database.UsuarioDAO.acessosSuspeitosSeteDias;
+import static database.UsuarioDAO.ultimoAcesso;
 
 public class UsuarioDashboardUI {
 
@@ -55,8 +60,8 @@ public class UsuarioDashboardUI {
             JPanel buscarPanel = new JPanel(new MigLayout("wrap 2, insets 20, gap 20", "[grow][grow]", "[]20[]20[]"));
             buscarPanel.setBackground(new Color(45, 45, 45));
 
-            buscarPanel.add(createDashboardCard("Acessos Suspeitos", "5", new Color(204, 0, 0)), "growx");
-            buscarPanel.add(createDashboardCard("Último Acesso", "2025-05-20", new Color(0, 102, 204)), "growx");
+            buscarPanel.add(DashboardCard.createDashboardCard("Acessos Suspeitos - Últimos sete dias", String.valueOf(acessosSuspeitosSeteDias(idUsuario)), new Color(204, 0, 0)), "growx");
+            buscarPanel.add(DashboardCard.createDashboardCard("Último Acesso", ultimoAcesso(idUsuario), new Color(0, 102, 204)), "growx");
 
             JPanel buscaPanel = new JPanel(new MigLayout("", "[grow][100]", ""));
             buscaPanel.setOpaque(false);
@@ -182,7 +187,7 @@ public class UsuarioDashboardUI {
                         int idUrl = garantirUrlRegistrada(urlDigitada);
 
                         if (idUrl > 0) {
-                            dao.AcessoDAO acessoDAO = new dao.AcessoDAO();
+                            AcessoDAO acessoDAO = new AcessoDAO();
                             acessoDAO.registrarAcesso(idUsuario, idUrl, false);
                             atualizarTabelaAcessos(tabela, idUsuario);
                         } else {
@@ -201,21 +206,6 @@ public class UsuarioDashboardUI {
             frame.setContentPane(mainPanel);
             frame.setVisible(true);
         });
-    }
-
-    private static JPanel createDashboardCard(String title, String value, Color color) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(color);
-        panel.setPreferredSize(new Dimension(200, 100));
-        JLabel titleLabel = new JLabel(title);
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        JLabel valueLabel = new JLabel(value);
-        valueLabel.setForeground(Color.WHITE);
-        valueLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        panel.add(titleLabel, BorderLayout.NORTH);
-        panel.add(valueLabel, BorderLayout.CENTER);
-        return panel;
     }
 
     private static JPanel createSectionPanel(String titulo, JComponent conteudo) {
@@ -249,7 +239,7 @@ public class UsuarioDashboardUI {
     }
 
     private static void atualizarTabelaAcessos(JTable tabela, int idUsuario) {
-        dao.AcessoDAO acessoDAO = new dao.AcessoDAO();
+        AcessoDAO acessoDAO = new AcessoDAO();
         List<model.Acesso> acessos = acessoDAO.listarAcessosPorUsuario(idUsuario);
 
         String[] colunas = {"URL", "Data", "Suspeito"};
@@ -263,5 +253,57 @@ public class UsuarioDashboardUI {
         }
 
         tabela.setModel(new javax.swing.table.DefaultTableModel(dados, colunas));
+    }
+
+    public static class DashboardCard extends JPanel {
+        private Color backgroundColor;
+
+        public DashboardCard(String title, String value, Color color) {
+            super(new BorderLayout());
+            this.backgroundColor = color;
+            setOpaque(false); // importante para desenhar o fundo customizado
+
+            setPreferredSize(new Dimension(200, 100));
+            setBorder(new EmptyBorder(10, 15, 10, 15)); // espaçamento interno
+
+            JLabel titleLabel = new JLabel(title);
+            titleLabel.setForeground(Color.WHITE);
+            titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            titleLabel.setHorizontalAlignment(SwingConstants.CENTER);  // centralizar título
+
+            JLabel valueLabel = new JLabel(value);
+            valueLabel.setForeground(Color.WHITE);
+            valueLabel.setFont(new Font("Segoe UI", Font.BOLD, 36));
+            valueLabel.setHorizontalAlignment(SwingConstants.CENTER); // centralizar valor
+
+            add(titleLabel, BorderLayout.NORTH);
+            add(valueLabel, BorderLayout.CENTER);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+
+            // Habilita antialiasing para suavizar bordas
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Preenche fundo arredondado com cor de fundo
+            g2.setColor(backgroundColor);
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+
+            // Opcional: desenha borda arredondada branca (espessura 2)
+            g2.setStroke(new BasicStroke(2f));
+            g2.setColor(Color.WHITE);
+            g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 20, 20);
+
+            g2.dispose();
+
+            super.paintComponent(g);
+        }
+
+        // Método estático para facilitar criação do card
+        public static JPanel createDashboardCard(String title, String value, Color color) {
+            return new DashboardCard(title, value, color);
+        }
     }
 }
