@@ -143,9 +143,9 @@ public class UsuarioDashboardUI {
                 System.exit(0);
             });
             //TODO: ALGUMA COISA
-            // === Autocomplete
             JPopupMenu sugestoesPopup = new JPopupMenu();
             sugestoesPopup.setFocusable(false);
+
             urlField.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
@@ -163,6 +163,12 @@ public class UsuarioDashboardUI {
                                 });
                                 sugestoesPopup.add(item);
                             }
+
+                            //TODO: colocar função que vai considerar as setas do teclado para busca
+                            if (sugestoes.size() > 8) {
+                                MenuScroller.setScrollerFor(sugestoesPopup, 8, 150);
+                            }
+
                             sugestoesPopup.show(urlField, 0, urlField.getHeight());
                         }
                     }
