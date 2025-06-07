@@ -18,6 +18,7 @@ public class AlertaDialog extends JDialog {
         this.idAlerta = idAlerta;
         setTitle(idAlerta == null ? "Inserir Alerta" : "Editar Alerta");
         setSize(400, 250);
+        setLocationRelativeTo(null);
         setLayout(new GridLayout(3, 2));
 
         add(new JLabel("ID Acesso:"));

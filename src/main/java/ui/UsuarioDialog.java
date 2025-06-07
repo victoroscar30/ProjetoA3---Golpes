@@ -18,6 +18,7 @@ public class UsuarioDialog extends JDialog {
         this.idUsuario = idUsuario;
         setTitle(idUsuario == null ? "Inserir Usuário" : "Editar Usuário");
         setSize(400, 300);
+        setLocationRelativeTo(null);
         setLayout(new GridLayout(7, 2));
 
         add(new JLabel("Nome:"));

@@ -18,6 +18,7 @@ public class AdminPanel extends JFrame {
     public AdminPanel() {
         setTitle("Painel Admin");
         setSize(1000, 700); // tamanho aumentado
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 

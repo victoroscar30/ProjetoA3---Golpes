@@ -18,6 +18,7 @@ public class AcessoDialog extends JDialog {
         this.idAcesso = idAcesso;
         setTitle(idAcesso == null ? "Inserir Acesso" : "Editar Acesso");
         setSize(300, 200);
+        setLocationRelativeTo(null);
         setLayout(new GridLayout(4, 2));
 
         add(new JLabel("ID Usuário:"));
