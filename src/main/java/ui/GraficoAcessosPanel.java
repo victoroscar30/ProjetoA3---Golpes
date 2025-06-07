@@ -7,14 +7,19 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
-
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.labels.ItemLabelAnchor;
+import org.jfree.chart.ui.TextAnchor;
+import org.jfree.chart.labels.ItemLabelPosition;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 
 public class GraficoAcessosPanel extends JPanel {
 
@@ -33,11 +38,11 @@ public class GraficoAcessosPanel extends JPanel {
                 String labelAtual = labels[i];
 
                 String query = """
-                    SELECT u.url, COUNT(*) as total
+                    SELECT u.classificacao, COUNT(*) as total
                     FROM acessos a
                     JOIN urls u ON a.id_url = u.id
                     WHERE a.data_acesso >= NOW() - INTERVAL ? DAY
-                    GROUP BY u.url
+                    GROUP BY u.classificacao
                     ORDER BY total DESC
                     LIMIT 10;
                 """;
@@ -47,9 +52,9 @@ public class GraficoAcessosPanel extends JPanel {
                     ResultSet rs = ps.executeQuery();
 
                     while (rs.next()) {
-                        String url = rs.getString("url");
+                        String classificacao = rs.getString("classificacao");
                         int total = rs.getInt("total");
-                        dataset.addValue(total, labelAtual, url);
+                        dataset.addValue(total, labelAtual, classificacao);
                     }
                 }
             }
@@ -59,14 +64,31 @@ public class GraficoAcessosPanel extends JPanel {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-                "Top URLs por Período",
-                "URL",
+                "Tipos de Site por Período",
+                "Classificação",
                 "Quantidade de Acessos",
                 dataset
         );
 
         CategoryPlot plot = chart.getCategoryPlot();
         plot.setRenderer(new BarRenderer());
+
+        BarRenderer renderer = new BarRenderer();
+
+
+        renderer.setDefaultItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+        renderer.setDefaultItemLabelsVisible(true);
+
+
+        renderer.setDefaultPositiveItemLabelPosition(new ItemLabelPosition(
+                ItemLabelAnchor.OUTSIDE12,
+                TextAnchor.BOTTOM_CENTER
+        ));
+
+        renderer.setDefaultItemLabelFont(new Font("SansSerif", Font.PLAIN, 10));
+        renderer.setDefaultItemLabelPaint(Color.BLACK);
+
+        plot.setRenderer(renderer);
 
         ChartPanel chartPanel = new ChartPanel(chart);
         add(chartPanel, BorderLayout.CENTER);
