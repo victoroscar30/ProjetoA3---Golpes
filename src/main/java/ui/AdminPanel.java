@@ -88,6 +88,8 @@ public class AdminPanel extends JFrame {
         JTabbedPane graficosTabs = new JTabbedPane();
         graficosTabs.addTab("Acessos por URL", new GraficoAcessosPanel());
         graficosTabs.addTab("Cadastros de Usuários", new GraficoUsuariosPanel());
+        graficosTabs.addTab("Classificações", new GraficoUrls());
+        graficosTabs.addTab("Top Acessos", new GraficoTopAcessos());
         abas.addTab("Gráficos", graficosTabs);
 
         add(abas);
