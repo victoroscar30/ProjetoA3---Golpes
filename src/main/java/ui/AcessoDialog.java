@@ -11,7 +11,6 @@ public class AcessoDialog extends JDialog {
     private JCheckBox suspeitoCheck;
     private JButton salvarBtn;
     private JButton cancelarBtn;
-    private JButton trocarBtn;
 
     private Integer idAcesso;
 
