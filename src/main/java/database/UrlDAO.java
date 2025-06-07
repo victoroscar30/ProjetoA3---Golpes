@@ -104,4 +104,41 @@ public class UrlDAO {
             return urlTexto;
         }
     }
+
+    public String getTipoAmeaca(String urlDigitada)
+    {
+        String query = "SELECT CLASSIFICACAO FROM urls WHERE url = ?";
+
+        try (Connection con = Conexao.conectar();
+             PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setString(1, urlDigitada);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+            return "desconhecida";
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "erro";
+        }
+    }
+
+    public static String getMensagemAviso(String tipoAmeaca) {
+        switch (tipoAmeaca.toLowerCase()) { // Usamos .toLowerCase() para tornar o case insensível
+            case "phishing":
+                return "**Cuidado!** Esta página pode ser uma **tentativa de fraude (phishing)**. Isso significa que ela pode estar tentando enganar você para roubar seus dados, como senhas ou informações bancárias. É melhor não clicar em links, não digitar nada e fechar esta página.";
+            case "desconhecida":
+                return "Esta URL é **desconhecida** para nós. Não conseguimos confirmar se ela é segura ou perigosa. Tenha cautela ao prosseguir, especialmente se não tiver certeza da origem.";
+            case "suspeita":
+                return "**Atenção!** Esta URL é **suspeita**. Encontramos alguns sinais que indicam um risco, mas não temos certeza total. Recomendamos muita cautela: pense bem antes de clicar, baixar arquivos ou fornecer qualquer informação.";
+            case "segura":
+                return "Esta URL parece **segura**. Nossas verificações não encontraram problemas. Você pode acessá-la com confiança.";
+            default:
+                // Caso o tipo de ameaça não seja reconhecido
+                return "Tipo de ameaça desconhecido. Por favor, consulte o suporte ou tenha cautela.";
+        }
+    }
 }

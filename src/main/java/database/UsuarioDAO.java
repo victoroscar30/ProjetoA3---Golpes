@@ -95,7 +95,7 @@ public class UsuarioDAO {
     }
 
     public static String ultimoAcesso (int id_usuario){
-        String query = "SELECT MAX(DATE_FORMAT(DATA_ACESSO, '%d/%m/%Y')) AS DATA\n" +
+        String query = "SELECT (DATE_FORMAT(MAX(DATA_ACESSO), '%d/%m/%Y')) AS DATA\n" +
                 "  FROM ACESSOS A \n" +
                 "  WHERE A.ID_USUARIO = ?";
 
