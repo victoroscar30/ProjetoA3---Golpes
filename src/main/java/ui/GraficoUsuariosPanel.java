@@ -1,18 +1,33 @@
 package ui;
 
 import database.Conexao;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.labels.ItemLabelAnchor;
+import org.jfree.chart.labels.ItemLabelPosition;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.plot.*;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.ui.TextAnchor;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.List;
+
 
 public class GraficoUsuariosPanel extends JPanel {
 
@@ -53,7 +68,6 @@ public class GraficoUsuariosPanel extends JPanel {
                 PlotOrientation.VERTICAL,
                 false, true, false
         );
-
         ChartPanel chartPanel = new ChartPanel(chart);
         add(chartPanel, BorderLayout.CENTER);
     }
