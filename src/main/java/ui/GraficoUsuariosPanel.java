@@ -68,6 +68,21 @@ public class GraficoUsuariosPanel extends JPanel {
                 PlotOrientation.VERTICAL,
                 false, true, false
         );
+
+        // Configurações para exibir os valores nos pontos
+        CategoryPlot plot = chart.getCategoryPlot();
+        LineAndShapeRenderer renderer = new LineAndShapeRenderer();
+        renderer.setDefaultItemLabelsVisible(true);
+        renderer.setDefaultItemLabelGenerator(new StandardCategoryItemLabelGenerator("{2}", new DecimalFormat("0")));
+        renderer.setDefaultPositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER));
+//        renderer.setDefaultItemLabelPaint(Color.BLUE);
+        renderer.setItemLabelAnchorOffset(12.0);
+        renderer.setDefaultItemLabelFont(new Font("SansSerif", Font.BOLD, 14));
+        renderer.setSeriesShape(0, new java.awt.geom.Ellipse2D.Double(-4, -4, 8, 8));
+
+        // Configurar o renderizador no plot
+        plot.setRenderer(renderer);
+
         ChartPanel chartPanel = new ChartPanel(chart);
         add(chartPanel, BorderLayout.CENTER);
     }

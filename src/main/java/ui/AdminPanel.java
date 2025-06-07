@@ -6,14 +6,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
+
 import static database.Conexao.conectar;
+import static ui.UsuarioDashboardUI.mostrarTelaUsuario;
 
 public class AdminPanel extends JFrame {
     private JComboBox<String> tabelaComboBox;
     private JTable dadosTable;
     private DefaultTableModel tableModel;
 
-    private JButton inserirBtn, editarBtn, deletarBtn, atualizarBtn;
+    private JButton inserirBtn, editarBtn, deletarBtn, atualizarBtn, trocarBtn;
 
     public AdminPanel() {
         setTitle("Painel Admin");
@@ -35,11 +37,14 @@ public class AdminPanel extends JFrame {
         editarBtn = new JButton("Editar");
         deletarBtn = new JButton("Deletar");
         atualizarBtn = new JButton("Atualizar");
+        trocarBtn = new JButton("Alterar Visão - Comum");
+
 
         topPanel.add(inserirBtn);
         topPanel.add(editarBtn);
         topPanel.add(deletarBtn);
         topPanel.add(atualizarBtn);
+        topPanel.add(trocarBtn);
 
         gerenciamentoPanel.add(topPanel, BorderLayout.NORTH);
 
@@ -55,6 +60,13 @@ public class AdminPanel extends JFrame {
         inserirBtn.addActionListener(e -> inserirRegistro());
         editarBtn.addActionListener(e -> editarRegistro());
         deletarBtn.addActionListener(e -> deletarRegistro());
+        trocarBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {  // Correct spelling
+                dispose();  // Close current window
+                mostrarTelaUsuario("Fulano", 1);  // Open new window
+            }
+        });
 
         abas.addTab("Gerenciamento", gerenciamentoPanel);
 
