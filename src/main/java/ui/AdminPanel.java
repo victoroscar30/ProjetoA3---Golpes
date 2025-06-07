@@ -17,11 +17,16 @@ public class AdminPanel extends JFrame {
 
     public AdminPanel() {
         setTitle("Painel Admin");
-        setSize(800, 600);
-        setLayout(new BorderLayout());
+        setSize(1000, 700); // tamanho aumentado
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JTabbedPane abas = new JTabbedPane();
+
+        // ---------- Aba de gerenciamento ----------
+        JPanel gerenciamentoPanel = new JPanel(new BorderLayout());
 
         JPanel topPanel = new JPanel();
-
         tabelaComboBox = new JComboBox<>(new String[]{"usuarios", "urls", "acessos", "alertas"});
         topPanel.add(tabelaComboBox);
 
@@ -35,12 +40,12 @@ public class AdminPanel extends JFrame {
         topPanel.add(deletarBtn);
         topPanel.add(atualizarBtn);
 
-        add(topPanel, BorderLayout.NORTH);
+        gerenciamentoPanel.add(topPanel, BorderLayout.NORTH);
 
         tableModel = new DefaultTableModel();
         dadosTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(dadosTable);
-        add(scrollPane, BorderLayout.CENTER);
+        gerenciamentoPanel.add(scrollPane, BorderLayout.CENTER);
 
         atualizarTabela();
 
@@ -50,8 +55,15 @@ public class AdminPanel extends JFrame {
         editarBtn.addActionListener(e -> editarRegistro());
         deletarBtn.addActionListener(e -> deletarRegistro());
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+        abas.addTab("Gerenciamento", gerenciamentoPanel);
+
+        // ---------- Aba de gráficos ----------
+        JTabbedPane graficosTabs = new JTabbedPane();
+        graficosTabs.addTab("Acessos por URL", new GraficoAcessosPanel());
+        graficosTabs.addTab("Cadastros de Usuários", new GraficoUsuariosPanel());
+        abas.addTab("Gráficos", graficosTabs);
+
+        add(abas);
     }
 
     private void atualizarTabela() {
@@ -151,6 +163,11 @@ public class AdminPanel extends JFrame {
     }
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
+        } catch (Exception e) {
+            System.err.println("Falha ao aplicar FlatLaf: " + e.getMessage());
+        }
         SwingUtilities.invokeLater(() -> new AdminPanel().setVisible(true));
     }
 }
