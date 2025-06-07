@@ -10,6 +10,7 @@ public class UsuarioDialog extends JDialog {
     private JTextField nomeField, emailField, senhaField, ipField;
     private JComboBox<String> generoCombo, tipoCombo;
     private JButton salvarBtn;
+    private JButton cancelarBtn;
 
     private Integer idUsuario;
 
@@ -49,6 +50,10 @@ public class UsuarioDialog extends JDialog {
         add(salvarBtn);
 
         salvarBtn.addActionListener(e -> salvar());
+
+        cancelarBtn = new JButton("Cancelar");
+        cancelarBtn.addActionListener(e -> dispose());
+        add(cancelarBtn);
 
         if (idUsuario != null) carregarDados();
     }
