@@ -15,7 +15,7 @@ public class AdminPanel extends JFrame {
     private JTable dadosTable;
     private DefaultTableModel tableModel;
 
-    private JButton inserirBtn, editarBtn, deletarBtn, atualizarBtn, trocarBtn;
+    private JButton inserirBtn, editarBtn, deletarBtn, atualizarBtn, trocarBtn, sairBtn;
 
     public AdminPanel() {
         setTitle("Painel Admin");
@@ -29,22 +29,35 @@ public class AdminPanel extends JFrame {
         // ---------- Aba de gerenciamento ----------
         JPanel gerenciamentoPanel = new JPanel(new BorderLayout());
 
-        JPanel topPanel = new JPanel();
-        tabelaComboBox = new JComboBox<>(new String[]{"usuarios", "urls", "acessos", "alertas"});
-        topPanel.add(tabelaComboBox);
+        JPanel topPanel = new JPanel(new BorderLayout());
 
+        JPanel leftPanel = new JPanel();
+        JLabel labelTabela = new JLabel("Tabela: ");
+        leftPanel.add(labelTabela);
+        tabelaComboBox = new JComboBox<>(new String[]{"usuarios", "urls", "acessos", "alertas"});
+        leftPanel.add(tabelaComboBox);
+
+        JPanel rightPanel = new JPanel();
         inserirBtn = new JButton("Inserir");
         editarBtn = new JButton("Editar");
         deletarBtn = new JButton("Deletar");
         atualizarBtn = new JButton("Atualizar");
+        leftPanel.add(inserirBtn);
+        leftPanel.add(editarBtn);
+        leftPanel.add(deletarBtn);
+        leftPanel.add(atualizarBtn);
+
         trocarBtn = new JButton("Alterar Visão - Comum");
+        trocarBtn.setBackground(Color.GREEN);
+        trocarBtn.setForeground(Color.BLACK);
+        sairBtn = new JButton("Sair");
+        sairBtn.setBackground(Color.RED);
+        sairBtn.setForeground(Color.BLACK);
+        rightPanel.add(sairBtn);
+        rightPanel.add(trocarBtn);
 
-
-        topPanel.add(inserirBtn);
-        topPanel.add(editarBtn);
-        topPanel.add(deletarBtn);
-        topPanel.add(atualizarBtn);
-        topPanel.add(trocarBtn);
+        topPanel.add(leftPanel, BorderLayout.WEST);
+        topPanel.add(rightPanel, BorderLayout.EAST);
 
         gerenciamentoPanel.add(topPanel, BorderLayout.NORTH);
 
@@ -60,6 +73,7 @@ public class AdminPanel extends JFrame {
         inserirBtn.addActionListener(e -> inserirRegistro());
         editarBtn.addActionListener(e -> editarRegistro());
         deletarBtn.addActionListener(e -> deletarRegistro());
+        sairBtn.addActionListener(e -> dispose());
         trocarBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {  // Correct spelling
