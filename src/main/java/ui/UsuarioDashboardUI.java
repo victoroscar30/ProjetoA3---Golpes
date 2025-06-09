@@ -3,6 +3,7 @@ package ui;
 import com.formdev.flatlaf.FlatDarkLaf;
 import database.AcessoDAO;
 import database.UrlDAO;
+import database.UsuarioDAO;
 import net.miginfocom.swing.MigLayout;
 import database.UsuarioDAO.*;
 
@@ -163,7 +164,7 @@ public class UsuarioDashboardUI {
             avisoBuscaScroll.getViewport().setOpaque(false);
 
             // Título com bordas arredondadas apenas na parte superior
-            JLabel avisoBuscaTitulo = new JLabel(" ATENÇÃO - VERIFICAÇÃO DE URL ") {
+            JLabel avisoBuscaTitulo = new JLabel(" VERIFICAÇÃO DE URL ") {
                 @Override
                 protected void paintComponent(Graphics g) {
                     Graphics2D g2 = (Graphics2D) g.create();
@@ -193,7 +194,7 @@ public class UsuarioDashboardUI {
             buscarPanel.add(createSectionPanel("Avisos Dinâmicos", avisoScroll), "growx, wrap");
 
             // === TELA CONTA ===
-            JPanel atualizarPanel = new JPanel(new MigLayout("wrap 2", "[][grow]", "[]10[]10[]"));
+            /*JPanel atualizarPanel = new JPanel(new MigLayout("wrap 2", "[][grow]", "[]10[]10[]"));
             atualizarPanel.setOpaque(false);
             atualizarPanel.setBackground(new Color(45, 45, 45));
             atualizarPanel.add(new JLabel("Novo Email:"));
@@ -206,7 +207,76 @@ public class UsuarioDashboardUI {
             atualizarPanel.add(new JButton("Atualizar"));
             JPanel contaPanel = new JPanel(new BorderLayout());
             contaPanel.setBackground(new Color(45, 45, 45));
-            contaPanel.add(createSectionPanel("Atualizar Conta", atualizarPanel), BorderLayout.CENTER);
+            contaPanel.add(createSectionPanel("Atualizar Conta", atualizarPanel), BorderLayout.CENTER);*/
+
+            //int idUsuario = /* ID do usuário logado */;
+
+            // Criar componentes
+            JPanel atualizarPanel = new JPanel(new MigLayout("wrap 2", "[][grow]", "[]10[]10[]10[]10[]10"));
+            atualizarPanel.setOpaque(false);
+            atualizarPanel.setBackground(new Color(45, 45, 45));
+
+            atualizarPanel.add(new JLabel("Nova Senha:"));
+            JPasswordField novaSenhaField = new JPasswordField();
+            novaSenhaField.setPreferredSize(new Dimension(200, 25));
+            atualizarPanel.add(novaSenhaField);
+
+            atualizarPanel.add(new JLabel("Confirmar Nova Senha:"));
+            JPasswordField confirmarSenhaField = new JPasswordField();
+            confirmarSenhaField.setPreferredSize(new Dimension(200, 25));
+            atualizarPanel.add(confirmarSenhaField);
+
+            // Label de erro
+            JLabel senhaErroLabel = new JLabel(" ");
+            senhaErroLabel.setForeground(Color.RED);
+            senhaErroLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+            atualizarPanel.add(senhaErroLabel, "skip, growx, wrap");
+
+            // Label de sucesso
+            JLabel sucessoLabel = new JLabel(" ");
+            sucessoLabel.setForeground(new Color(0, 180, 0));
+            sucessoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+            atualizarPanel.add(sucessoLabel, "skip, growx, wrap");
+
+            // Botão
+            atualizarPanel.add(new JLabel());
+            JButton atualizarButton = new JButton("Atualizar Senha");
+            atualizarPanel.add(atualizarButton);
+
+            // Painel principal
+            JPanel contaPanel = new JPanel(new BorderLayout());
+            contaPanel.setBackground(new Color(45, 45, 45));
+            contaPanel.add(createSectionPanel("Atualizar Senha", atualizarPanel), BorderLayout.CENTER);
+
+            // Lógica do botão
+            atualizarButton.addActionListener(e -> {
+                String novaSenha = new String(novaSenhaField.getPassword());
+                String confirmarSenha = new String(confirmarSenhaField.getPassword());
+
+                if (novaSenha.isBlank() || confirmarSenha.isBlank()) {
+                    senhaErroLabel.setText("Todos os campos devem ser preenchidos.");
+                    sucessoLabel.setText(" ");
+                } else if (!novaSenha.equals(confirmarSenha)) {
+                    senhaErroLabel.setText("As senhas não conferem. Por favor, tente novamente.");
+                    sucessoLabel.setText(" ");
+                } else {
+                    UsuarioDAO dao = new UsuarioDAO();
+                    boolean atualizado = dao.atualizarSenhaUsuario(idUsuario, novaSenha);
+
+                    if (atualizado) {
+                        senhaErroLabel.setText(" ");
+                        sucessoLabel.setText("Senha atualizada com sucesso!");
+                        novaSenhaField.setText("");
+                        confirmarSenhaField.setText("");
+                    } else {
+                        senhaErroLabel.setText("Erro ao atualizar senha. Tente novamente.");
+                        sucessoLabel.setText(" ");
+                    }
+                }
+            });
+
+
+
 
             // === Adicionar ao CardLayout ===
             contentPanel.add(buscarPanel, "BUSCAR");
@@ -215,9 +285,17 @@ public class UsuarioDashboardUI {
             // === Botões de navegação ===
             JButton btnBuscar = new JButton("Buscar");
             JButton btnConta = new JButton("Conta");
+            JButton btnAdmin = new JButton("Modo Admin");
             JButton btnSair = new JButton("Sair");
 
-            JButton[] navButtons = {btnBuscar, btnConta};
+            // Verifica se o usuário é admin
+            UsuarioDAO dao = new UsuarioDAO();
+            boolean isAdmin = dao.isUsuarioAdmin(idUsuario); // idUsuario vem do login
+
+            // Se não for admin, o botão será invisível
+            btnAdmin.setVisible(isAdmin);
+
+            JButton[] navButtons = {btnBuscar, btnConta,btnAdmin};
             for (JButton btn : navButtons) {
                 btn.setFocusPainted(false);
                 btn.setBackground(new Color(60, 60, 60));
@@ -283,6 +361,10 @@ public class UsuarioDashboardUI {
                         }
                     }
                 }
+            });
+
+            btnAdmin.addActionListener(e -> {
+                new AdminTela(); // Abre a nova tela
             });
 
             buscarBtn.addActionListener(e -> {

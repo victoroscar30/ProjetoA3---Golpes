@@ -115,4 +115,39 @@ public class UsuarioDAO {
             return "";
         }
     }
+
+    public boolean atualizarSenhaUsuario(int idUsuario, String novaSenha) {
+        String sql = "UPDATE usuarios SET senha = ? WHERE id = ?";
+        try (Connection con = Conexao.conectar();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setString(1, novaSenha);
+            stmt.setInt(2, idUsuario);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isUsuarioAdmin(int idUsuario) {
+        String sql = "SELECT tipo FROM usuarios WHERE id = ?";
+        try (Connection con = Conexao.conectar();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setInt(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String tipo = rs.getString("tipo");
+                return tipo != null && tipo.equalsIgnoreCase("admin");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
