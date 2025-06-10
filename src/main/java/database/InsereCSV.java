@@ -1,3 +1,5 @@
+package database;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.*;
@@ -7,8 +9,8 @@ public class InsereCSV{
 
     public static void main(String[] args) {
         String jdbcURL = "jdbc:mysql://localhost:3306/projeto_golpes"; // nunca muda
-        String username = "gustavinho"; // coloca o usuario que você settou no workbench
-        String password = "123456"; // e a senha referente ao usuario
+        String username = "root"; // coloca o usuario que você settou no workbench
+        String password = "0000"; // e a senha referente ao usuario
 
         String csvFilePath = "C:/Users/Gustavo/Downloads/a3 bora.csv";
 
