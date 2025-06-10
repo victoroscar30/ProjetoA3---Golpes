@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import ADT.*;
+import ui.ImagemAvisos.AvisoVisualFactory;
+import ui.ImagemAvisos.EsteiraAvisos;
 
 import static database.UrlDAO.garantirUrlRegistrada;
 import static database.UsuarioDAO.acessosSuspeitosSeteDias;
@@ -191,7 +193,18 @@ public class UsuarioDashboardUI {
 
             //buscarPanel.add(avisoBuscaPanel, "span 2, growx");
             buscarPanel.add(createSectionPanel("Histórico de Acessos", tabelaScroll), "growx");
-            buscarPanel.add(createSectionPanel("Avisos Dinâmicos", avisoScroll), "growx, wrap");
+            //buscarPanel.add(createSectionPanel("Avisos Dinâmicos", avisoScroll), "growx, wrap");
+            //todo: adicionar rotina de carrossel com imagens e links
+            //https://raw.githubusercontent.com/victoroscar30/avisos-imagens-publicas/main/Phishing_1.png
+
+            // Carrega os avisos visuais com imagem e link
+            ListaDuplamenteLigadaAvisos lista = AvisoVisualFactory.carregarAvisosVisuais();
+            EsteiraAvisos esteira = new EsteiraAvisos(lista);
+
+            // Adiciona no painel de busca
+            buscarPanel.add(createSectionPanel("Avisos Dinâmicos", esteira), "growx, wrap");
+
+
 
             // === TELA CONTA ===
             /*JPanel atualizarPanel = new JPanel(new MigLayout("wrap 2", "[][grow]", "[]10[]10[]"));
@@ -416,7 +429,7 @@ public class UsuarioDashboardUI {
                             buscarPanel.add(avisoBuscaPanel, "span 2, growx");
                             buscarPanel.add(createSectionPanel("Buscar URL", buscaPanel), "span 2, growx");
                             buscarPanel.add(createSectionPanel("Histórico de Acessos", tabelaScroll), "growx");
-                            buscarPanel.add(createSectionPanel("Avisos Gerais", avisoScroll), "growx, wrap");
+                            buscarPanel.add(createSectionPanel("Avisos Dinâmicos", esteira), "growx, wrap");
 
                             buscarPanel.revalidate();
                             buscarPanel.repaint();
@@ -521,6 +534,8 @@ public class UsuarioDashboardUI {
         JLabel label = new JLabel(titulo);
         label.setFont(new Font("Segoe UI", Font.BOLD, 16));
         label.setForeground(Color.WHITE);
+        label.setPreferredSize(new Dimension(200, 25)); // ou maior se necessário
+
 
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
