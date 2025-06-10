@@ -6,41 +6,65 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
+
 import static database.Conexao.conectar;
+import static ui.UsuarioDashboardUI.mostrarTelaUsuario;
 
 public class AdminPanel extends JFrame {
     private JComboBox<String> tabelaComboBox;
     private JTable dadosTable;
     private DefaultTableModel tableModel;
 
-    private JButton inserirBtn, editarBtn, deletarBtn, atualizarBtn;
+    private JButton inserirBtn, editarBtn, deletarBtn, atualizarBtn, trocarBtn, sairBtn;
 
     public AdminPanel() {
         setTitle("Painel Admin");
-        setSize(800, 600);
-        setLayout(new BorderLayout());
+        setSize(1000, 700); // tamanho aumentado
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        JPanel topPanel = new JPanel();
+        JTabbedPane abas = new JTabbedPane();
 
+        // ---------- Aba de gerenciamento ----------
+        JPanel gerenciamentoPanel = new JPanel(new BorderLayout());
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+
+        JPanel leftPanel = new JPanel();
+        JLabel labelTabela = new JLabel("Tabela: ");
+        leftPanel.add(labelTabela);
         tabelaComboBox = new JComboBox<>(new String[]{"usuarios", "urls", "acessos", "alertas"});
-        topPanel.add(tabelaComboBox);
+        leftPanel.add(tabelaComboBox);
 
+        JPanel rightPanel = new JPanel();
         inserirBtn = new JButton("Inserir");
         editarBtn = new JButton("Editar");
         deletarBtn = new JButton("Deletar");
         atualizarBtn = new JButton("Atualizar");
+        leftPanel.add(inserirBtn);
+        leftPanel.add(editarBtn);
+        leftPanel.add(deletarBtn);
+        leftPanel.add(atualizarBtn);
 
-        topPanel.add(inserirBtn);
-        topPanel.add(editarBtn);
-        topPanel.add(deletarBtn);
-        topPanel.add(atualizarBtn);
+        trocarBtn = new JButton("Alterar Visão - Comum");
+        trocarBtn.setBackground(Color.GREEN);
+        trocarBtn.setForeground(Color.BLACK);
+        sairBtn = new JButton("Sair");
+        sairBtn.setBackground(Color.RED);
+        sairBtn.setForeground(Color.BLACK);
+        rightPanel.add(sairBtn);
+        rightPanel.add(trocarBtn);
 
-        add(topPanel, BorderLayout.NORTH);
+        topPanel.add(leftPanel, BorderLayout.WEST);
+        topPanel.add(rightPanel, BorderLayout.EAST);
+
+        gerenciamentoPanel.add(topPanel, BorderLayout.NORTH);
 
         tableModel = new DefaultTableModel();
         dadosTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(dadosTable);
-        add(scrollPane, BorderLayout.CENTER);
+        gerenciamentoPanel.add(scrollPane, BorderLayout.CENTER);
 
         atualizarTabela();
 
@@ -49,9 +73,26 @@ public class AdminPanel extends JFrame {
         inserirBtn.addActionListener(e -> inserirRegistro());
         editarBtn.addActionListener(e -> editarRegistro());
         deletarBtn.addActionListener(e -> deletarRegistro());
+        sairBtn.addActionListener(e -> dispose());
+        trocarBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {  // Correct spelling
+                dispose();  // Close current window
+                mostrarTelaUsuario("Fulano", 1);  // Open new window
+            }
+        });
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+        abas.addTab("Gerenciamento", gerenciamentoPanel);
+
+        // ---------- Aba de gráficos ----------
+        JTabbedPane graficosTabs = new JTabbedPane();
+        graficosTabs.addTab("Acessos por URL", new GraficoAcessosPanel());
+        graficosTabs.addTab("Cadastros de Usuários", new GraficoUsuariosPanel());
+        graficosTabs.addTab("Classificações", new GraficoUrls());
+        graficosTabs.addTab("Top Acessos", new GraficoTopAcessos());
+        abas.addTab("Gráficos", graficosTabs);
+
+        add(abas);
     }
 
     private void atualizarTabela() {
@@ -151,6 +192,11 @@ public class AdminPanel extends JFrame {
     }
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
+        } catch (Exception e) {
+            System.err.println("Falha ao aplicar FlatLaf: " + e.getMessage());
+        }
         SwingUtilities.invokeLater(() -> new AdminPanel().setVisible(true));
     }
 }

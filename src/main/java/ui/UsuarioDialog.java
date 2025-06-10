@@ -10,6 +10,7 @@ public class UsuarioDialog extends JDialog {
     private JTextField nomeField, emailField, senhaField, ipField;
     private JComboBox<String> generoCombo, tipoCombo;
     private JButton salvarBtn;
+    private JButton cancelarBtn;
 
     private Integer idUsuario;
 
@@ -18,6 +19,7 @@ public class UsuarioDialog extends JDialog {
         this.idUsuario = idUsuario;
         setTitle(idUsuario == null ? "Inserir Usuário" : "Editar Usuário");
         setSize(400, 300);
+        setLocationRelativeTo(null);
         setLayout(new GridLayout(7, 2));
 
         add(new JLabel("Nome:"));
@@ -48,6 +50,10 @@ public class UsuarioDialog extends JDialog {
         add(salvarBtn);
 
         salvarBtn.addActionListener(e -> salvar());
+
+        cancelarBtn = new JButton("Cancelar");
+        cancelarBtn.addActionListener(e -> dispose());
+        add(cancelarBtn);
 
         if (idUsuario != null) carregarDados();
     }

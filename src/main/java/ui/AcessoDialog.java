@@ -10,6 +10,7 @@ public class AcessoDialog extends JDialog {
     private JTextField idUsuarioField, idUrlField;
     private JCheckBox suspeitoCheck;
     private JButton salvarBtn;
+    private JButton cancelarBtn;
 
     private Integer idAcesso;
 
@@ -18,6 +19,7 @@ public class AcessoDialog extends JDialog {
         this.idAcesso = idAcesso;
         setTitle(idAcesso == null ? "Inserir Acesso" : "Editar Acesso");
         setSize(300, 200);
+        setLocationRelativeTo(null);
         setLayout(new GridLayout(4, 2));
 
         add(new JLabel("ID Usuário:"));
@@ -34,8 +36,11 @@ public class AcessoDialog extends JDialog {
 
         salvarBtn = new JButton("Salvar");
         add(salvarBtn);
-
         salvarBtn.addActionListener(e -> salvar());
+
+        cancelarBtn = new JButton("Cancelar");
+        cancelarBtn.addActionListener(e -> dispose());
+        add(cancelarBtn);
 
         if (idAcesso != null) carregarDados();
     }

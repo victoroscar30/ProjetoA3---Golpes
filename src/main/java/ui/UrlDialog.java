@@ -10,6 +10,7 @@ public class UrlDialog extends JDialog {
     private JTextField urlField, dominioField;
     private JComboBox<String> classificacaoCombo;
     private JButton salvarBtn;
+    private JButton cancelarBtn;
 
     private Integer idUrl;
 
@@ -18,6 +19,7 @@ public class UrlDialog extends JDialog {
         this.idUrl = idUrl;
         setTitle(idUrl == null ? "Inserir URL" : "Editar URL");
         setSize(400, 200);
+        setLocationRelativeTo(null);
         setLayout(new GridLayout(4, 2));
 
         add(new JLabel("URL:"));
@@ -34,8 +36,12 @@ public class UrlDialog extends JDialog {
 
         salvarBtn = new JButton("Salvar");
         add(salvarBtn);
-
         salvarBtn.addActionListener(e -> salvar());
+
+        cancelarBtn = new JButton("Cancelar");
+        cancelarBtn.addActionListener(e -> dispose());
+        add(cancelarBtn);
+
 
         if (idUrl != null) carregarDados();
     }

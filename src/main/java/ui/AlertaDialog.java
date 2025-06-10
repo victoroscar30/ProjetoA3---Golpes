@@ -10,6 +10,7 @@ public class AlertaDialog extends JDialog {
     private JTextField idAcessoField;
     private JTextArea mensagemArea;
     private JButton salvarBtn;
+    private JButton cancelarBtn;
 
     private Integer idAlerta;
 
@@ -18,6 +19,7 @@ public class AlertaDialog extends JDialog {
         this.idAlerta = idAlerta;
         setTitle(idAlerta == null ? "Inserir Alerta" : "Editar Alerta");
         setSize(400, 250);
+        setLocationRelativeTo(null);
         setLayout(new GridLayout(3, 2));
 
         add(new JLabel("ID Acesso:"));
@@ -30,8 +32,12 @@ public class AlertaDialog extends JDialog {
 
         salvarBtn = new JButton("Salvar");
         add(salvarBtn);
-
         salvarBtn.addActionListener(e -> salvar());
+
+        cancelarBtn = new JButton("Cancelar");
+        cancelarBtn.addActionListener(e -> dispose());
+        add(cancelarBtn);
+
 
         if (idAlerta != null) carregarDados();
     }
