@@ -39,8 +39,10 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 
 ---
 ## 📬 Contato
-====================================================================================================================================================================================================
-- Victor Macartney Oscar Monteiro          || RA: 12522164519         || LinkedIn: [https://www.linkedin.com/in/victor-monteiro-339291221/] #https://www.linkedin.com/in/victor-monteiro-339291221/
+=====================================================================================================
+- Victor Macartney Oscar Monteiro
+  ||  RA: 12522164519
+  || LinkedIn: [https://www.linkedin.com/in/victor-monteiro-339291221/] #https://www.linkedin.com/in/victor-monteiro-339291221/
 - Gustavo Maglio Campos
 - Luanna Correia da Silva
 - Maria Fernanda Kazi de Menezes
