@@ -20,7 +20,7 @@ public class LoginUI {
     private static JToggleButton loginBtn;
     private static JToggleButton registerBtn;
 
-    public static void main(String[] args) {
+    public static void TelaLogin() {
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception e) {
@@ -166,7 +166,7 @@ public class LoginUI {
                 }
 
                 if ("admin".equalsIgnoreCase(usuario.getTipo())) {
-                    new AdminTela();
+                    new AdminPanel();
                 } else {
                     UsuarioDashboardUI.mostrarTelaUsuario(usuario.getNome(), usuario.getId());
                 }

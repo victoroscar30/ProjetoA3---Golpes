@@ -377,7 +377,7 @@ public class UsuarioDashboardUI {
             });
 
             btnAdmin.addActionListener(e -> {
-                new AdminTela(); // Abre a nova tela
+                new AdminPanel(); // Abre a nova tela
             });
 
             buscarBtn.addActionListener(e -> {

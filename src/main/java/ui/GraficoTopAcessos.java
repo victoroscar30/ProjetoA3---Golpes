@@ -1,6 +1,6 @@
 package ui;
 
-import com.orsonpdf.util.TextAnchor;
+//import com.orsonpdf.util.TextAnchor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;

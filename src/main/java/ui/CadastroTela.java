@@ -51,7 +51,7 @@ public class CadastroTela extends JFrame {
 
         if (sucesso) {
             JOptionPane.showMessageDialog(this, "Usuário cadastrado com sucesso!");
-            new LoginTela().setVisible(true);
+            new LoginUI();
             dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Erro ao cadastrar usuário. Tente outro email.");
