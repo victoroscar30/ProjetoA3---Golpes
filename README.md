@@ -20,8 +20,8 @@ A plataforma conta com funcionalidades de cadastro, login, consulta de sites e u
 
 Este projeto foi desenvolvido com as seguintes tecnologias:
 
-- Java (backend)
-- Banco de Dados (configuração incluída no código)
+- Java (Backend)
+- MySQL (DB)
 
 ---
 
