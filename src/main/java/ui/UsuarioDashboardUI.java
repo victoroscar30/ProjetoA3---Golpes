@@ -5,7 +5,7 @@ import database.AcessoDAO;
 import database.UrlDAO;
 import database.UsuarioDAO;
 import net.miginfocom.swing.MigLayout;
-import database.UsuarioDAO.*;
+import database.PermissaoUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -376,8 +376,12 @@ public class UsuarioDashboardUI {
                 }
             });
 
-            btnAdmin.addActionListener(e -> {
-                new AdminPanel(); // Abre a nova tela
+            btnAdmin.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    frame.dispose();
+                    PermissaoUtils.verificarPermissaoAdmin(nomeUsuario, idUsuario);
+                }
             });
 
             buscarBtn.addActionListener(e -> {

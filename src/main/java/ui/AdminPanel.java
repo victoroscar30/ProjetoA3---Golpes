@@ -17,7 +17,7 @@ public class AdminPanel extends JFrame {
 
     private JButton inserirBtn, editarBtn, deletarBtn, atualizarBtn, trocarBtn, sairBtn;
 
-    public AdminPanel() {
+    public AdminPanel(String nomeUsuario, int idUsuario) {
         setTitle("Painel Admin");
         setSize(1000, 700); // tamanho aumentado
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -78,7 +78,7 @@ public class AdminPanel extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {  // Correct spelling
                 dispose();  // Close current window
-                mostrarTelaUsuario("Fulano", 1);  // Open new window
+                mostrarTelaUsuario(nomeUsuario, idUsuario);  // Open new window
             }
         });
 
@@ -191,12 +191,12 @@ public class AdminPanel extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
-        } catch (Exception e) {
-            System.err.println("Falha ao aplicar FlatLaf: " + e.getMessage());
-        }
-        SwingUtilities.invokeLater(() -> new AdminPanel().setVisible(true));
-    }
+//    public static void main(String[] args) {
+//        try {
+//            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
+//        } catch (Exception e) {
+//            System.err.println("Falha ao aplicar FlatLaf: " + e.getMessage());
+//        }
+//        SwingUtilities.invokeLater(() -> new AdminPanel().setVisible(true));
+//    }
 }
