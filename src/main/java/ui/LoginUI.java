@@ -165,11 +165,8 @@ public class LoginUI {
                     window.dispose(); // fecha a janela de login
                 }
 
-                if ("admin".equalsIgnoreCase(usuario.getTipo())) {
-                    new AdminPanel();
-                } else {
-                    UsuarioDashboardUI.mostrarTelaUsuario(usuario.getNome(), usuario.getId());
-                }
+                UsuarioDashboardUI.mostrarTelaUsuario(usuario.getNome(), usuario.getId());
+
             } else {
                 erroLoginLabel.setText("Email ou senha incorretos.");
             }
