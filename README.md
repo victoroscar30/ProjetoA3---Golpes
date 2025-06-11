@@ -9,8 +9,8 @@ A plataforma conta com funcionalidades de cadastro, login, consulta de sites e u
 
 - [🛠 Tecnologias](#-tecnologias)
 - [✨ Funcionalidades](#-funcionalidades)
-- [🚀 Instalação](#-instalação)
 - [📬 Contato](#-contato)
+- [🚀 Instalação](#-instalação)
 
 ---
 
@@ -38,6 +38,9 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 - Acesso ao histórico de consultas feitas por todos os usuários
 
 ---
+## 📬 Contato
+
+- Gustavo Maglio Campos
 
 ## 🚀 Instalação
 
@@ -45,7 +48,3 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 
 ```bash
 git clone https://github.com/victoroscar30/ProjetoA3---Golpes.git
-
-## 📬 Contato
-
-- Gustavo Maglio Campos
