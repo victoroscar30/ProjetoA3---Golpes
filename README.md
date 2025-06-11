@@ -44,7 +44,7 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 |--------------------------------------|---------------|--------------------------------------------------------------------------|
 | **Victor Macartney Oscar Monteiro**  | 12522164519   | [linkedin.com/in/victor-monteiro-339291221](https://www.linkedin.com/in/victor-monteiro-339291221/) |
 | **Gustavo Maglio Campos**            | 12522162221   | [linkedin.com/in/gustavo-campos-a2a974225](https://www.linkedin.com/in/gustavo-campos-a2a974225)     |
-| **Luanna Correia da Silva**          | 12522213975   | [linkedin.com/in/luanna-correia-5a0a2a203](https://www.linkedin.com/in/luanna-correia-5a0a2a203/)    |
+| **Luanna Correia da Silva**          | 12522219759   | [linkedin.com/in/luanna-correia-5a0a2a203](https://www.linkedin.com/in/luanna-correia-5a0a2a203/)    |
 | **Maria Fernanda Kazi de Menezes**   | 12522213975   | [linkedin.com/in/maria-fernanda-menezes-762a05233](https://www.linkedin.com/in/maria-fernanda-menezes-762a05233/) |
 
 
