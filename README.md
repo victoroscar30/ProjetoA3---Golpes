@@ -39,7 +39,7 @@ Este projeto foi desenvolvido com as seguintes tecnologias e estruturas:
 
 * **Autenticação segura** com registro de acessos suspeitos
 * **Verificação de URLs** em tempo real
-* **Classificação de riscos:** phishing, malware, scam, etc.
+* **Classificação de riscos:** phishing, desconhecido, suspeito e seguro.
 * **Histórico de acessos** com datas e horários
 * **Dashboard visual** com métricas importantes
 * **Sistema de avisos dinâmicos** com imagens educativas
