@@ -62,16 +62,24 @@ Este projeto foi desenvolvido com as seguintes tecnologias e estruturas:
 
 O projeto visa combater os golpes financeiros listados pelo Banco Central, especialmente:
 
-* Phishing
-* Sites falsos de bancos
-* Fraudes em investimentos
-* Golpes de falsos suportes técnicos
+* **Para o Usuário:**
+    * **Prevenção:** Permitir a verificação instantânea de URLs para identificar e evitar sites maliciosos (phishing, malware, scam).
+    * **Registro:** Manter um histórico pessoal de todas as URLs consultadas, oferecendo um registro de segurança.
+    * **Conscientização:** Apresentar avisos visuais educativos e dinâmicos, com exemplos claros de phishing, como ter cautela com sites desconhecidos e sites suspeitos, educando sobre golpes comuns.
+    * **Controle:** Oferecer ferramentas para o gerenciamento da própria conta, como atualização segura de senha.
 
+* **Para o Administrador:**
+    * **Gestão de Dados:** Fornecer controle completo (CRUD) sobre usuários, URLs, acessos e alertas do sistema.
+    * **Monitoramento:** Visualizar padrões e tendências através de gráficos (acessos por URL, novos cadastros, classificações), permitindo a detecção proativa de ameaças.
+    * **Gerenciamento de Ameaças:** Habilitar a classificação e o tratamento eficaz de URLs suspeitas e a administração de alertas.
+    * **Flexibilidade:** Permitir a alternância entre os modos de visualização (administrador/usuário) para testes e análise.
+  
 Através de uma plataforma que:
-
 * **Educa** usuários sobre ameaças
 * **Previne** acessos a sites maliciosos
 * **Monitora** padrões de acesso suspeitos
+
+Em suma, o projeto busca criar um ecossistema de proteção e educação, empoderando tanto o usuário final quanto a equipe de segurança no combate aos golpes financeiros.
 
 ---
 
