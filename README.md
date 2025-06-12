@@ -54,3 +54,6 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 
 ```bash
 git clone https://github.com/victoroscar30/ProjetoA3---Golpes.git
+
+2. É necessária a instalação do JConnector para a connexão com o MYSQL
+https://dev.mysql.com/downloads/connector/j/
