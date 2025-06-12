@@ -25,7 +25,7 @@ import static database.UsuarioDAO.ultimoAcesso;
 public class UsuarioDashboardUI {
 
     public static void main(String[] args) {
-        mostrarTelaUsuario("Fulano", 1);
+        mostrarTelaUsuario("Sebatião", 1);
     }
 
     public static void mostrarTelaUsuario(String nomeUsuario, int idUsuario) {
@@ -48,14 +48,19 @@ public class UsuarioDashboardUI {
             JPanel mainPanel = new JPanel(new BorderLayout());
 
             // Sidebar
-            JPanel sidebar = new JPanel(new MigLayout("wrap 1, insets 20 10 20 10, gap 20, aligny center", "[grow, fill]"));
-            sidebar.setPreferredSize(new Dimension(200, 0));
+            //JPanel sidebar = new JPanel(new MigLayout("wrap 1, insets 20 10 20 10, gap 20, aligny center", "[grow, fill]"));
+            JPanel sidebar = new JPanel(new MigLayout("wrap 1, insets 20 10 20 10, gap 10", "[]"));
+            //sidebar.setPreferredSize(new Dimension(200, 0));
+            sidebar.setPreferredSize(new Dimension(210, sidebar.getWidth()));
             sidebar.setBackground(new Color(30, 30, 30));
 
-            JLabel appLabel = new JLabel("Teste");
+            //JLabel appLabel = new JLabel("Bem-Vindo, " + nomeUsuario);
+            JLabel appLabel = new JLabel(
+                    "<html><div style='width:180px;margin-bottom:10px'>Bem-Vindo,<br>" + nomeUsuario + "</div></html>"
+            );
             appLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
             appLabel.setForeground(Color.WHITE);
-            sidebar.add(appLabel);
+            sidebar.add(appLabel,"align left");
 
             // Painel de conteúdo com CardLayout
             CardLayout cardLayout = new CardLayout();
@@ -76,8 +81,8 @@ public class UsuarioDashboardUI {
             JButton buscarBtn = new JButton("Buscar");
             JButton limparBtn = new JButton("Limpar");
             buscaPanel.add(urlField, "growx");
-            buscaPanel.add(buscarBtn);
-            buscaPanel.add(limparBtn);
+            buscaPanel.add(buscarBtn, "w 100!");
+            buscaPanel.add(limparBtn, "w 100!");
 
             // Painel de avisos com bordas arredondadas
             JPanel avisoBuscaPanel = new JPanel(new BorderLayout()) {
@@ -325,7 +330,8 @@ public class UsuarioDashboardUI {
                     }
                 });
 
-                sidebar.add(btn, "align center, growx");
+                //sidebar.add(btn, "align center, growx");
+                sidebar.add(btn, "w 180!, align left");
             }
 
             btnSair.setFocusPainted(false);
@@ -335,7 +341,8 @@ public class UsuarioDashboardUI {
             btnSair.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
             sidebar.add(Box.createVerticalGlue(), "growy, pushy");
-            sidebar.add(btnSair, "align center, growx");
+            //sidebar.add(btnSair, "align center, growx");
+            sidebar.add(btnSair, "w 180!, align left");
 
             btnBuscar.addActionListener(e -> cardLayout.show(contentPanel, "BUSCAR"));
             btnConta.addActionListener(e -> cardLayout.show(contentPanel, "CONTA"));
